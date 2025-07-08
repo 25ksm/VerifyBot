@@ -22,7 +22,6 @@ def consent():
 def submit():
     try:
         ip = request.remote_addr
-        user_agent = request.headers.get("User-Agent")
         discord_id = request.form.get("discord_id")
         username = request.form.get("username")
         joined_at = request.form.get("joined_at")
