@@ -8,8 +8,11 @@ from .shared.spreadsheet import update_spreadsheet
 import requests
 import os
 
-app = Flask(__name__, template_folder="templates")
+# ① instance_relative_config=True 로 플라스크 인스턴스 폴더 사용
+app = Flask(__name__, template_folder="templates", instance_relative_config=True)
 
+# ② 인스턴스 폴더(instance/)가 없다면 생성
+os.makedirs(app.instance_path, exist_ok=True)
 @app.route("/")
 def index():
     return "서버가 실행 중입니다."
