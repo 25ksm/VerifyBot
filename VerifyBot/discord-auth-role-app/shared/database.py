@@ -39,9 +39,7 @@ def save_user_info(discord_id, username, joined_at, ip):
         "discord_id": discord_id,
         "username": username,
         "joined_at": joined_at,
-        "ip": ip,
-        "country": country,
-        "region": region
+        "ip": ip
     })
 
     # 파일에 저장
