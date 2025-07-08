@@ -21,7 +21,7 @@ DATA_FILE = os.path.join(BASE_DIR, "user_data.json")
 SERVICE_ACCOUNT_FILE = os.path.join(os.path.dirname(__file__), '..', 'credentials.json')
 
 
-def save_user_info(discord_id, username, joined_at, ip, country, region):
+def save_user_info(discord_id, username, joined_at, ip):
     # 파일이 없으면 빈 리스트로 초기화
     if not os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'w', encoding='utf-8') as f:
@@ -87,21 +87,21 @@ def authenticate_google_sheets():
     return gspread.authorize(creds)
 
 # 사용자 정보 저장 함수 (Google Sheets로 저장)
-def save_user_info_to_sheets(discord_id, username, joined_at, ip, country, region):
+def save_user_info_to_sheets(discord_id, username, joined_at, ip):
     client = authenticate_google_sheets()
 
     # 구글 시트 열기
     sheet = client.open_by_key(SPREADSHEET_ID).worksheet(SHEET_NAME)
     
     # 새로운 데이터를 시트에 추가
-    row = [discord_id, username, joined_at, ip, country, region]
+    row = [discord_id, username, joined_at, ip]
     sheet.append_row(row)
 
 # 사용자 정보 저장 함수
-def save_user_info(discord_id, username, joined_at, ip, country, region):
+def save_user_info(discord_id, username, joined_at, ip):
     # 기존 save_user_info 코드도 실행할 수 있음 (로컬 JSON 파일에 저장)
     # 기존 코드: 
     # ...
     
     # 구글 시트에도 저장
-    save_user_info_to_sheets(discord_id, username, joined_at, ip, country, region)
+    save_user_info_to_sheets(discord_id, username, joined_at, ip )
