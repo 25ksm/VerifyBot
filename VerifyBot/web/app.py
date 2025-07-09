@@ -26,14 +26,11 @@ def consent():
 
 @app.route("/submit", methods=["POST"])
 def submit():
-    try:
-        discord_id = request.form.get("discord_id")
-        username = request.form.get("username")
-        joined_at = request.form.get("joined_at")
-        save_user_info(discord_id, username, joined_at)
-        return render_template("success.html")
-    except Exception as e:
-        return f"에러 발생: {str(e)}", 500
+    discord_id = request.form.get("discord_id")
+    username = request.form.get("username")
+    joined_at = request.form.get("joined_at")
+    save_user_info(discord_id, username, joined_at)
+    return render_template("success.html")
 
 @app.route("/success")
 def success():
