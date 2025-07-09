@@ -3,8 +3,10 @@ load_dotenv()
 
 from flask import Flask, render_template, request
 from . import init_user_data
+
 from .shared.database import save_user_info, get_users, get_google_sheet
 from .shared.spreadsheet import update_spreadsheet
+
 import requests
 import os
 
@@ -13,9 +15,10 @@ app = Flask(__name__, template_folder="templates", instance_relative_config=True
 
 # ② 인스턴스 폴더(instance/)가 없다면 생성
 os.makedirs(app.instance_path, exist_ok=True)
+
 @app.route("/")
 def index():
-    return "서버가 실행 중입니다."
+    return redirect("https://verifybot-q193.onrender.com/consent")
 
 @app.route("/consent")
 def consent():
@@ -33,8 +36,11 @@ def submit():
 
         save_user_info(discord_id, username, joined_at, ip)
         return render_template("success.html")
+
     except Exception as e:
-        return f"에러 발생: {str(e)}", 500
+        # 로그에 전체 스택트레이스 찍기
+        traceback.print_exc()
+        return f"에러 발생 ({e.__class__.__name__}): {repr(e)}", 500
 
 @app.route("/admin")
 def admin():
