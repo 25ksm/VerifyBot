@@ -35,6 +35,10 @@ def submit():
     except Exception as e:
         return f"에러 발생: {str(e)}", 500
 
+@app.route("/success")
+def consent():
+    return render_template("success.html")
+
 @app.route("/admin")
 def admin():
     users = get_users()
