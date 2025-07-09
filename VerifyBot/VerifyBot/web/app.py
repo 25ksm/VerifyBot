@@ -16,9 +16,9 @@ app = Flask(__name__, template_folder="templates", instance_relative_config=True
 # ② 인스턴스 폴더(instance/)가 없다면 생성
 os.makedirs(app.instance_path, exist_ok=True)
 
-@app.route("/")
+@app.route("/") 
 def index():
-    return "서버가 실행 중입니다."
+    return render_template("consent.html")
 
 @app.route("/consent")
 def consent():
@@ -26,21 +26,15 @@ def consent():
 
 @app.route("/submit", methods=["POST"])
 def submit():
-    try:
-        ip = request.remote_addr
-        discord_id = request.form.get("discord_id")
-        username = request.form.get("username")
-        joined_at = request.form.get("joined_at")
+    discord_id = request.form.get("discord_id")
+    username = request.form.get("username")
+    joined_at = request.form.get("joined_at")
+    save_user_info(discord_id, username, joined_at)
+    return render_template("success.html")
 
-        geo = requests.get(f"http://ip-api.com/json/{ip}").json()
-
-        save_user_info(discord_id, username, joined_at, ip)
-        return render_template("success.html")
-
-    except Exception as e:
-        # 로그에 전체 스택트레이스 찍기
-        traceback.print_exc()
-        return f"에러 발생 ({e.__class__.__name__}): {repr(e)}", 500
+@app.route("/success")
+def success():
+    return render_template("success.html")
 
 @app.route("/admin")
 def admin():

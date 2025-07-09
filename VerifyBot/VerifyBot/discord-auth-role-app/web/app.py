@@ -25,15 +25,12 @@ def consent():
 @app.route("/submit", methods=["POST"])
 def submit():
     try:
-        ip         = request.remote_addr
         discord_id = request.form["discord_id"]
         username   = request.form["username"]
         joined_at  = request.form["joined_at"]
-        
-        geo     = requests.get(f"http://ip-api.com/json/{ip}").json()
 
         # shared/database.py 의 save_user_info() 가 current_app.instance_path/user_data.json에 씁니다
-        save_user_info(discord_id, username, joined_at, ip)
+        save_user_info(discord_id, username, joined_at)
         return render_template("success.html")
 
     except Exception as e:
