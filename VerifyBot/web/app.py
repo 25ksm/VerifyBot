@@ -17,8 +17,8 @@ app = Flask(__name__, template_folder="templates", instance_relative_config=True
 os.makedirs(app.instance_path, exist_ok=True)
 
 @app.route("/")
-def root_redirect():
-    return redirect('/consent', code=302)
+def index():
+    return render_template("consent.html")
 
 @app.route("/consent")
 def consent():
