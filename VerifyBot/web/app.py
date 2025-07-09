@@ -9,6 +9,7 @@ from .shared.spreadsheet import update_spreadsheet
 
 import requests
 import os
+import traceback
 
 # ① instance_relative_config=True 로 플라스크 인스턴스 폴더 사용
 app = Flask(__name__, template_folder="templates", instance_relative_config=True)
@@ -31,13 +32,11 @@ def submit():
         username = request.form.get("username")
         joined_at = request.form.get("joined_at")
 
-        save_user_info(discord_id, username, joined_at, ip)
+        save_user_info(discord_id, username, joined_at)
         return render_template("success.html")
 
     except Exception as e:
-        # 로그에 전체 스택트레이스 찍기
-        traceback.print_exc()
-        return f"에러 발생 ({e.__class__.__name__}): {repr(e)}", 500
+        return f"에러 발생: {str(e)}", 500
 
 @app.route("/admin")
 def admin():
