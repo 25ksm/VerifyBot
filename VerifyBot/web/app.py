@@ -36,7 +36,7 @@ def submit():
         return f"에러 발생: {str(e)}", 500
 
 @app.route("/success")
-def consent():
+def success():
     return render_template("success.html")
 
 @app.route("/admin")
