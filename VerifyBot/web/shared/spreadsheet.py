@@ -26,7 +26,7 @@ def authenticate_google_sheets():
 def open_spreadsheet():
     try:
         client = authenticate_google_sheets()
-        sheet = client.open(SPREADSHEET_NAME).sheet1
+        sheet = client.open(SPREADSHEET_NAME).worksheet("인증리스트")
         return sheet
     except Exception as e:
         print(f"[ERROR] 스프레드시트를 열 수 없습니다: {e}")
