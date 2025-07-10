@@ -52,15 +52,15 @@ def authenticate_google_sheets():
 
 # 구글 시트에 유저 정보 저장
 
-def save_user_info_to_sheets(discord_id, username, joined_at):
+def save_user_info_to_sheets(username, discord_id, joined_at):
     client = authenticate_google_sheets()
     sheet = client.open_by_key(SPREADSHEET_ID).worksheet(SHEET_NAME)
-    row = [discord_id, username, joined_at]
+    row = [username, discord_id, joined_at]
     sheet.append_row(row)
 
 # 유저 정보 저장 (로컬 + 구글 시트)
 
-def save_user_info(discord_id, username, joined_at):
+def save_user_info(username, discord_id, joined_at):
     # 로컬 JSON 초기화
     if not os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'w', encoding='utf-8') as f:
@@ -75,8 +75,8 @@ def save_user_info(discord_id, username, joined_at):
 
     # 데이터 추가
     entry = {
-        'discord_id': discord_id,
         'username': username,
+        'discord_id': discord_id,
         'joined_at': joined_at,
     }
     data.append(entry)
@@ -86,7 +86,7 @@ def save_user_info(discord_id, username, joined_at):
         json.dump(data, f, ensure_ascii=False, indent=4)
 
     # 구글 시트에도 저장
-    save_user_info_to_sheets(discord_id, username, joined_at)
+    save_user_info_to_sheets(username, discord_id, joined_at)
 
 # 로컬 JSON에서 유저 목록 불러오기
 

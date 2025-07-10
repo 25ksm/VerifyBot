@@ -42,7 +42,7 @@ def apply_styles(sheet):
         ))
 
         # B1:D1 셀: 초록색 배경 + 흰 글씨 + 볼드
-        format_cell_range(sheet, 'B1:D1', cellFormat(
+        format_cell_range(sheet, 'B1:C1', cellFormat(
             backgroundColor=Color(0, 0.5, 0),  # 초록색 배경
             textFormat=textFormat(bold=True, foregroundColor=Color(1, 1, 1))  # 흰색 글씨, 볼드
         ))
