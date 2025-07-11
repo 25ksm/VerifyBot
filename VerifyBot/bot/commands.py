@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord import Embed, ButtonStyle
 from discord.ui import View, Button
 
-# 인증 채널 및 역할 저장 (휘발성)
+# 인증 채널 및 역할 저장
 auth_channel_id = None
 auth_role_name = None
 
