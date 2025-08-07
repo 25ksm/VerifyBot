@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from discord import Embed, ButtonStyle
 from discord.ui import View, Button
+import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import config
 
