@@ -10,6 +10,8 @@ from .shared.spreadsheet import update_spreadsheet
 import requests
 import os
 
+import config
+
 # ① instance_relative_config=True 로 플라스크 인스턴스 폴더 사용
 app = Flask(__name__, template_folder="templates", instance_relative_config=True)
 
@@ -31,6 +33,15 @@ def submit():
         username = request.form.get("username")
         joined_at = request.form.get("joined_at")
         save_user_info(username, discord_id, joined_at)
+        guild = discord.utils.get(bot.guilds)
+        member = guild.get_member(int(discord_id))
+        role = discord.utils.get(guild.roles, name=auth_role_name)
+        if not member:
+            return "서버에서 사용자를 찾을 수 없습니다."
+        if not role:
+            return "인증 역할을 찾을 수 없습니다."
+        if not guild:
+            return "봇이 서버에 없습니다."
         return render_template("success.html")
     except Exception as e:
         return f"에러 발생: {str(e)}", 500
@@ -54,21 +65,7 @@ def callback():
     if not code:
         return "No code received."
 
-    # Discord OAuth2 토큰 요청
-    data = {
-        "client_id": os.getenv("CLIENT_ID"),
-        "client_secret": os.getenv("CLIENT_SECRET"),
-        "grant_type": "authorization_code",
-        "code": code,
-        "redirect_uri": os.getenv("DISCORD_REDIRECT_URI"),
-        "scope": "identify guilds.join"
-    }
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    resp = requests.post("https://discord.com/api/oauth2/token", data=data, headers=headers)
-    if resp.status_code != 200:
-        return f"Discord 인증 실패: {resp.text}", 500
-    return resp.json()
-
+    # OAuth2 토큰 요청
     data = {
         "client_id": os.getenv("DISCORD_CLIENT_ID"),
         "client_secret": os.getenv("DISCORD_CLIENT_SECRET"),
@@ -83,11 +80,79 @@ def callback():
     }
 
     response = requests.post("https://discord.com/api/oauth2/token", data=data, headers=headers)
+    if response.status_code != 200:
+        return f"Discord 인증 실패: {response.text}", 500
+
+    tokens = response.json()
+    access_token = tokens["access_token"]
+    token_type = tokens["token_type"]  # 보통 "Bearer"
+
+    # 유저 정보 요청
+    user_response = requests.get(
+        "https://discord.com/api/users/@me",
+        headers={"Authorization": f"{token_type} {access_token}"}
+    )
+    if user_response.status_code != 200:
+        return f"유저 정보 가져오기 실패: {user_response.text}", 500
+
+    user = user_response.json()
+    user_id = user["id"]
+
+    # 서버에 유저 추가 + 역할 부여
+    guild_id = os.getenv("DISCORD_GUILD_ID")         # 서버 ID
+    role_id = os.getenv("DISCORD_ROLE_ID")           # 인증 시 부여할 역할 ID
+    bot_token = os.getenv("DISCORD_BOT_TOKEN")       # 봇 토큰
+
+    # 서버에 유저 추가
+    assign_role_url = f"https://discord.com/api/guilds/{guild_id}/members/{user_id}/roles/{role_id}"
+    add_member_data = {
+        "access_token": access_token
+    }
+
+    add_member_headers = {
+        "Authorization": f"Bot {bot_token}",
+        "Content-Type": "application/json"
+    }
+
+    member_response = requests.put(add_member_url, json=add_member_data, headers=add_member_headers)
+
+    if member_response.status_code not in [200, 201, 204]:
+        return f"서버 초대 실패: {member_response.text}", 500
+
+    # 역할 부여
+    role_url = f"https://discord.com/api/guilds/{guild_id}/members/{user_id}/roles/{role_id}"
+
+    role_response = requests.put(role_url, headers={
+        "Authorization": f"Bot {bot_token}"
+    })
+
+    if role_response.status_code != 204:
+        return f"역할 부여 실패: {role_response.text}", 500
+
+    # 완료 후 성공 페이지 렌더
+    return render_template("success.html")
+
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    response = requests.post("https://discord.com/api/oauth2/token", data=data, headers=headers)
 
     if response.status_code != 200:
         return f"Discord 인증 실패: {response.text}", 500
 
     return response.json()
+
+@app.route("/assign-role", methods=["POST"])
+def assign_role():
+    discord_id = request.form.get("discord_id")
+    
+    # 디스코드 봇 서버에 역할 요청
+    response = requests.post("http://your-discord-bot-server.com/api/assign-role", json={
+        "discord_id": discord_id
+    })
+
+    return redirect("https://discord.com/channels/@me")  # 혹은 인증 서버 주소
 
 # 테스트용 실행
 if __name__ == "__main__":
