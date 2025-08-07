@@ -6,6 +6,7 @@ from discord import Embed, ButtonStyle
 from discord.ui import View, Button
 from fastapi import FastAPI, Request
 
+app = FastAPI()
 
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 # 봇 인텐트 설정
@@ -110,3 +111,28 @@ async def slash_help(interaction: discord.Interaction):
         "🛠 먼저 `/인증채널 (채널명)`, `/인증역할 (역할명)`을 설정한 후 `/인증메시지`를 사용하세요.",
         ephemeral=True
     )
+
+@app.post("/api/assign-role")
+async def assign_role(request: Request):
+    data = await request.json()
+    discord_id = data.get("discord_id")
+    if not discord_id:
+        return {"status": "fail", "reason": "discord_id required"}
+
+    guild = bot.get_guild(GUILD_ID)
+    if guild is None:
+        return {"status": "fail", "reason": "Guild not found"}
+
+    member = guild.get_member(int(discord_id))
+    if member is None:
+        return {"status": "fail", "reason": "Member not found"}
+
+    role = guild.get_role(auth_role_id)
+    if role is None:
+        return {"status": "fail", "reason": "Role not found"}
+
+    try:
+        await member.add_roles(role, reason="Verification role assigned")
+        return {"status": "success"}
+    except Exception as e:
+        return {"status": "fail", "reason": str(e)}

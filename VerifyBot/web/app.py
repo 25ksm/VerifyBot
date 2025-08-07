@@ -3,6 +3,7 @@ load_dotenv()
 
 from flask import Flask, render_template, request
 from . import init_user_data
+from web.routes.verify_routes import verify_bp
 
 from .shared.database import save_user_info, get_users, get_google_sheet
 from .shared.spreadsheet import update_spreadsheet
@@ -142,31 +143,6 @@ def callback():
         return f"Discord 인증 실패: {response.text}", 500
 
     return response.json()
-
-@app.route("/assign-role", methods=["POST"])
-def assign_role():
-    discord_id = request.form.get("discord_id")
-    
-    # 디스코드 봇 서버에 역할 요청
-    response = requests.post("http://your-discord-bot-server.com/api/assign-role", json={
-        "discord_id": discord_id
-    })
-
-    return redirect("https://discord.com/channels/@me")  # 혹은 인증 서버 주소
-
-@app.route("/verify", methods=["POST"])
-def verify_user():
-    data = request.json()
-    discord_id = int(data["discord_id"])
-
-    guild = bot.get_guild(GUILD_ID)
-    member = guild.get_member(discord_id)
-    role = discord.utils.get(guild.roles, name="인증됨")
-
-    if member and role:
-        member.add_roles(role, reason="웹에서 인증 완료")
-        return {"status": "success"}
-    return {"status": "fail", "reason": "Member or Role not found"}
 
 # 테스트용 실행
 if __name__ == "__main__":
