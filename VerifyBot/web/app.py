@@ -7,7 +7,6 @@ from . import init_user_data
 from .shared.database import save_user_info, get_users, get_google_sheet
 from .shared.spreadsheet import update_spreadsheet
 
-import requests
 import os
 import sys
 
@@ -157,7 +156,7 @@ def assign_role():
     return redirect("https://discord.com/channels/@me")  # 혹은 인증 서버 주소
 
 @app.post("/api/assign-role")
-async def assign_role(req: Request):
+ def assign_role(req: Request):
     data = await req.json()
     discord_id = int(data["discord_id"])
 
