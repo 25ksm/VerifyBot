@@ -10,6 +10,7 @@ from .shared.spreadsheet import update_spreadsheet
 import requests
 import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import config
 
 # ① instance_relative_config=True 로 플라스크 인스턴스 폴더 사용
