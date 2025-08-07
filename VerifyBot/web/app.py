@@ -10,7 +10,6 @@ from .shared.spreadsheet import update_spreadsheet
 import os
 import sys
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import config
 
 # ① instance_relative_config=True 로 플라스크 인스턴스 폴더 사용
@@ -156,7 +155,7 @@ def assign_role():
     return redirect("https://discord.com/channels/@me")  # 혹은 인증 서버 주소
 
 @app.post("/api/assign-role")
- def assign_role(req: Request):
+def assign_role(req: Request):
     data = await req.json()
     discord_id = int(data["discord_id"])
 
