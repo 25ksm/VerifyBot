@@ -2,7 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-import commands as bot_commands  # commands.py 에 정의된 명령어 등록
+from bot import commands as bot_commands # commands.py 에 정의된 명령어 등록
 
 # 환경 변수 로드
 load_dotenv()
