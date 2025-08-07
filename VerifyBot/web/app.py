@@ -156,11 +156,11 @@ def assign_role():
 
 @app.route("/verify", methods=["POST"])
 async def verify_user(req: Request):
-    data = await req.json()
+    data = req.json()
     discord_id = int(data["discord_id"])
 
     guild = bot.get_guild(GUILD_ID)
-    await member = guild.get_member(discord_id)
+    member = guild.get_member(discord_id)
     role = discord.utils.get(guild.roles, name="인증됨")
 
     if member and role:
