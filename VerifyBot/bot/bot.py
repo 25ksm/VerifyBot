@@ -17,6 +17,8 @@ intents.members = True  # 슬래시 명령 시 사용자 정보 확인용
 # 봇 인스턴스 (commands.py 에서 가져옴)
 bot = bot_commands.bot
 
+GUILD_ID = int(os.getenv("GUILD_ID", "0"))
+
 # 봇 준비 완료 시 실행
 @bot.event
 async def on_ready():
