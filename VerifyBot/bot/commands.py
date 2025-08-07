@@ -1,9 +1,11 @@
 import os
 import discord
+import config
 from discord.ext import commands
 from discord import Embed, ButtonStyle
 from discord.ui import View, Button
 from fastapi import FastAPI, Request
+
 
 
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
