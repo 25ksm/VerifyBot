@@ -1,6 +1,7 @@
 # web/routes/verify_routes.py
 from flask import Blueprint, request, redirect
 import requests
+import os
 from bot.bot import bot, GUILD_ID
 import discord
 
