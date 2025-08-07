@@ -7,7 +7,6 @@ from discord.ui import View, Button
 from fastapi import FastAPI, Request
 
 
-
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 # 봇 인텐트 설정
 tokens = discord.Intents.default()
@@ -15,13 +14,16 @@ tokens.guilds = True
 tokens.messages = True
 tokens.message_content = True
 
+auth_channel_id = None
+auth_role_name = None
+
 # 봇 인스턴스 생성
 bot = commands.Bot(command_prefix="!", intents=tokens)
 
 # ----- PREFIX COMMANDS (! 접두사) -----
 
-@bot.command(name="인증채널")
-async def set_auth_channel(ctx, channel_name: str):
+@bot.tree.command(name="인증채널")
+async def slash_set_channel(interaction, channel_name):
     global auth_channel_id
     for ch in ctx.guild.text_channels:
         if ch.name == channel_name:
