@@ -22,8 +22,8 @@ bot = commands.Bot(command_prefix="!", intents=tokens)
 
 # ----- PREFIX COMMANDS (! 접두사) -----
 
-@bot.tree.command(name="인증채널")
-async def slash_set_channel(interaction, channel_name):
+@bot.command(name="인증채널")
+async def set_auth_channel(ctx, channel_name: str):
     global auth_channel_id
     for ch in ctx.guild.text_channels:
         if ch.name == channel_name:
@@ -83,7 +83,8 @@ async def slash_set_role(interaction: discord.Interaction, role_name: str):
     await interaction.response.send_message(f"✅ 인증 역할이 `{role_name}`(으)로 설정되었습니다.", ephemeral=True)
 
 @bot.tree.command(name="인증메시지", description="설정된 채널에 인증 임베드와 버튼을 보냅니다.")
-async def slash_send_message(interaction: discord.Interaction):
+async def slash_send_message(interaction: discord.Interaction, channel_name: str):
+    global auth_channel_id
     if auth_channel_id is None:
         return await interaction.response.send_message("❗ 먼저 `/인증채널` 명령으로 채널을 설정해주세요.", ephemeral=True)
     embed = Embed(
