@@ -9,3 +9,4 @@ gspread
 python-dotenv
 google-auth==2.28.1
 gspread_formatting
+discord.py
