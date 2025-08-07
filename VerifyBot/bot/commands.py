@@ -3,14 +3,13 @@ import discord
 from discord.ext import commands
 from discord import Embed, ButtonStyle
 from discord.ui import View, Button
-import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-import config
+from fastapi import FastAPI, Request
+from commands import bot, app
 
 # 인증 채널 및 역할 저장
-auth_channel_id = None
-auth_role_name = None
+app = FastAPI()
 
+bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 # 봇 인텐트 설정
 tokens = discord.Intents.default()
 tokens.guilds = True
