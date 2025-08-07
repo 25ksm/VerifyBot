@@ -7,9 +7,10 @@ from . import init_user_data
 from .shared.database import save_user_info, get_users, get_google_sheet
 from .shared.spreadsheet import update_spreadsheet
 
+import discord
+from discord.ext import commands
 import os
 import sys
-
 import config
 
 # ① instance_relative_config=True 로 플라스크 인스턴스 폴더 사용
