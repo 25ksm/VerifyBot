@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from discord import Embed, ButtonStyle
 from discord.ui import View, Button
+import config
 
 # 인증 채널 및 역할 저장
 auth_channel_id = None
@@ -88,7 +89,7 @@ async def slash_send_message(interaction: discord.Interaction):
         description="아래 버튼을 눌러 인증을 시작하세요.",
         color=0x00ff00
     )
-    auth_url = os.getenv("AUTH_WEB_URL", "http://localhost:5000") + "/consent"
+    auth_url = config.AUTH_WEB_URL.rstrip("/") + "/consent"
     button = Button(label="인증하기", style=ButtonStyle.link, url=auth_url)
     view = View()
     view.add_item(button)
@@ -106,3 +107,17 @@ async def slash_help(interaction: discord.Interaction):
         "🛠 먼저 `/인증채널 (채널명)`, `/인증역할 (역할명)`을 설정한 후 `/인증메시지`를 사용하세요.",
         ephemeral=True
     )
+
+@app.post("/api/assign-role")
+async def assign_role(req: Request):
+    data = await req.json()
+    discord_id = int(data["discord_id"])
+
+    guild = bot.get_guild(GUILD_ID)
+    member = guild.get_member(discord_id)
+    role = discord.utils.get(guild.roles, name="인증됨")
+
+    if member and role:
+        await member.add_roles(role, reason="웹에서 인증 완료")
+        return {"status": "success"}
+    return {"status": "fail", "reason": "Member or Role not found"}
