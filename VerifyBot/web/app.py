@@ -156,6 +156,20 @@ def assign_role():
 
     return redirect("https://discord.com/channels/@me")  # 혹은 인증 서버 주소
 
+@app.post("/api/assign-role")
+async def assign_role(req: Request):
+    data = await req.json()
+    discord_id = int(data["discord_id"])
+
+    guild = bot.get_guild(GUILD_ID)
+    member = guild.get_member(discord_id)
+    role = discord.utils.get(guild.roles, name="인증됨")
+
+    if member and role:
+        await member.add_roles(role, reason="웹에서 인증 완료")
+        return {"status": "success"}
+    return {"status": "fail", "reason": "Member or Role not found"}
+
 # 테스트용 실행
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
