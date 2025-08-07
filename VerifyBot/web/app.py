@@ -155,8 +155,8 @@ def assign_role():
     return redirect("https://discord.com/channels/@me")  # 혹은 인증 서버 주소
 
 @app.route("/verify", methods=["POST"])
-async def verify_user(req: Request):
-    data = req.json()
+def verify_user():
+    data = request.json()
     discord_id = int(data["discord_id"])
 
     guild = bot.get_guild(GUILD_ID)
