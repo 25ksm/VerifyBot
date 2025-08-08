@@ -21,6 +21,12 @@ auth_role_name = None
 # 봇 인스턴스 생성
 bot = commands.Bot(command_prefix="!", intents=tokens)
 
+
+auth_role_name = "인증된 유저"
+
+def get_auth_role_name():
+    return auth_role_name
+
 # ----- PREFIX COMMANDS (! 접두사) -----
 
 @bot.command(name="인증채널")

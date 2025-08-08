@@ -6,6 +6,7 @@ from bot.bot import bot, GUILD_ID
 import discord
 from config import auth_role_name
 from database import save_user_info
+from shared.database import save_user_info
 
 verify_bp = Blueprint("verify_bp", __name__)
 

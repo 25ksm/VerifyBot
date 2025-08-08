@@ -13,9 +13,6 @@ import os
 import sys
 import config
 
-# Blueprint 등록
-app.register_blueprint(verify_bp)
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
 
@@ -24,6 +21,10 @@ app = Flask(__name__, template_folder="templates", instance_relative_config=True
 
 # ② 인스턴스 폴더(instance/)가 없다면 생성
 os.makedirs(app.instance_path, exist_ok=True)
+
+# Blueprint 등록
+app.register_blueprint(verify_bp)
+
 
 @app.route("/") 
 def index():
