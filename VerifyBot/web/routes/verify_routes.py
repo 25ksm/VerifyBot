@@ -25,3 +25,5 @@ def verify_user():
         return jsonify({"status": "success"}), 200
     else:
         return jsonify({"status": "fail", "reason": "Bot API error"}), 500
+
+
