@@ -13,6 +13,12 @@ import os
 import sys
 import config
 
+# Blueprint 등록
+app.register_blueprint(verify_bp)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000)
+
 # ① instance_relative_config=True 로 플라스크 인스턴스 폴더 사용
 app = Flask(__name__, template_folder="templates", instance_relative_config=True)
 

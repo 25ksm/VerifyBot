@@ -1,9 +1,11 @@
 # web/routes/verify_routes.py
-from flask import Blueprint, request, redirect
+from flask import Blueprint, request, redirect, render_template
 import requests
 import os
 from bot.bot import bot, GUILD_ID
 import discord
+from config import auth_role_name
+from database import save_user_info
 
 verify_bp = Blueprint("verify_bp", __name__)
 
