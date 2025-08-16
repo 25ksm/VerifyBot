@@ -7,9 +7,6 @@ from discord.ui import View, Button
 from fastapi import FastAPI, Request
 import bot.commands as bot_commands  # bot/commands.py
 
-
-
-
 app = FastAPI()
 
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
