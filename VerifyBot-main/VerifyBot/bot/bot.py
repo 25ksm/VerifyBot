@@ -2,8 +2,8 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-from . import commands as bot_commands
-bot_commands.setup(bot)
+from . import commands as bot_commands  # commands.py
+
 
 # 환경 변수 로드
 load_dotenv()
@@ -17,6 +17,8 @@ intents.members = True  # 슬래시 명령 시 사용자 정보 확인용
 
 # 봇 인스턴스 (commands.py 에서 가져옴)
 bot = bot_commands.bot
+
+bot_commands.setup(bot)
 
 GUILD_ID = int(os.getenv("GUILD_ID", "0"))
 
