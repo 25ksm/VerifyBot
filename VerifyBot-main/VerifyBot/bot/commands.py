@@ -5,6 +5,10 @@ from discord.ext import commands
 from discord import Embed, ButtonStyle
 from discord.ui import View, Button
 from fastapi import FastAPI, Request
+import bot.commands as bot_commands  # bot/commands.py
+
+
+
 
 app = FastAPI()
 
@@ -26,6 +30,11 @@ auth_role_name = "인증된 유저"
 
 def get_auth_role_name():
     return auth_role_name
+
+def setup(bot):
+    @bot.command()
+    async def ping(ctx):
+        await ctx.send("pong!")
 
 # ----- PREFIX COMMANDS (! 접두사) -----
 
