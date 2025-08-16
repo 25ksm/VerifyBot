@@ -16,7 +16,7 @@ intents.message_content = True
 intents.members = True  # 슬래시 명령 시 사용자 정보 확인용
 
 # 봇 인스턴스 (commands.py 에서 가져옴)
-bot = bot_commands.bot
+bot = commands.Bot(command_prefix="!", intents=intents)
 
 bot_commands.setup(bot)
 
