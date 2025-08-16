@@ -2,7 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-from . import commands as bot_commands  # commands.py
+import bot.commands as bot_commands
 
 
 # 환경 변수 로드
