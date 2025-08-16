@@ -9,6 +9,9 @@ role = discord.utils.get(guild.roles, name=role_name)
 
 load_dotenv()
 
+auth_role_name = os.getenv("DISCORD_ROLE_NAME", "인증됨")
+DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
+DISCORD_ROLE_ID = os.getenv("DISCORD_ROLE_ID")
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 AUTH_WEB_URL = os.getenv("AUTH_WEB_URL", "http://localhost:5000")
 PORT = int(os.getenv("PORT", 5000))
